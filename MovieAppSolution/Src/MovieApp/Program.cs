@@ -1,7 +1,18 @@
+using MovieApp.Application.Interfaces;
+using MovieApp.Infrastructure;
+using MovieApp.Infrastructure.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddControllers();
+builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+
+await builder.Services.AddSeedsAsync(builder.Configuration);
 
 var app = builder.Build();
 
