@@ -1,7 +1,7 @@
 using MovieApp.Application.Extensions;
 using MovieApp.Application.Interfaces;
+using MovieApp.Application.Services;
 using MovieApp.Infrastructure;
-using MovieApp.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +10,8 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddControllers();
 builder.Services.AddInfrastructure(builder.Configuration);
-
-builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
 await builder.Services.AddSeedsAsync(builder.Configuration);
 
@@ -28,16 +28,16 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseSwaggerExtension();
 app.UseErrorHandlingMiddleware();
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapRazorPages();
     endpoints.MapControllers();
 });
-app.UseAuthentication();
-app.UseAuthorization();
-//app.UseSwaggerExtension();
-
 app.MapRazorPages();
 
 app.Run();
